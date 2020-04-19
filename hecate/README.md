@@ -25,4 +25,4 @@ Then, run the program through `python main.py`.
 #### Art
 - [Calciumtrice](https://calciumtrice.tumblr.com/)
 
-Not sure if I am allowed to use this ATM.
+All of the artwork I used by Calciumtrice can be found [here](https://opengameart.org/users/calciumtrice).
