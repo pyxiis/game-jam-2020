@@ -72,12 +72,16 @@ def search(maze, cost, start, end):
     max_iterations = (len(maze) // 2) ** 10
 
     # what squares do we search . serarch movement is left-right-top-bottom
-    # (4 movements) from every positon
+    # (8 movements) from every positon
 
     move = [[-1, 0],  # go up
+            [-1, -1],
             [0, -1],  # go left
+            [1, -1],
             [1, 0],  # go down
-            [0, 1]]  # go right
+            [1, 1],
+            [0, 1]  # go right
+            [-1, 1]]
 
     """
         1) We first get the current node by comparing all f cost and selecting the lowest cost node for further expansion
