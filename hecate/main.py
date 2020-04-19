@@ -1,5 +1,6 @@
 import arcade
 import yaml
+from engine.input import KeyManager
 
 try:
     from yaml import CLoader as Loader, CDumper as Dumper
@@ -13,7 +14,7 @@ class Hecate(arcade.Window):
 
     def __init__(self, width, height):
         super().__init__(width, height)
-
+        self.km = KeyManager()
         arcade.set_background_color(arcade.color.AMAZON)
 
     def setup(self):
@@ -26,20 +27,13 @@ class Hecate(arcade.Window):
         # Your drawing code goes here
 
     def update(self, delta_time):
-        """ All the logic to move, and the game logic goes here. """
         pass
 
     def on_key_press(self, key, modifiers):
-        print(key)
-        print(modifiers)
+        self.km.update_press(key, modifiers)
 
     def on_key_release(self, key, modifiers):
-        """Called when the user releases a key. """
-
-        if key == arcade.key.UP or key == arcade.key.DOWN:
-            self.player_sprite.change_y = 0
-        elif key == arcade.key.LEFT or key == arcade.key.RIGHT:
-            self.player_sprite.change_x = 0
+        self.km.update_release(key, modifiers)
 
 
 def main():
