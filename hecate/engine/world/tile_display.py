@@ -1,8 +1,10 @@
+import random
+
 import arcade
 
 from .binary_space_partitioning import RLDungeonGenerator
-from .floor import Floor
-from .wall import Ceiling
+from .floor import Floor, FloorDecor
+from .wall import Ceiling, Wall, WallDecor
 
 WALL_SPRITE_SCALING = 1
 WALL_SPRITE_SIZE = 16 * WALL_SPRITE_SCALING
@@ -14,6 +16,7 @@ class Dungeon():
         self.facade_list = arcade.SpriteList(use_spatial_hash=True)
         self.floor_list = arcade.SpriteList(use_spatial_hash=True)
         self.decor_list = arcade.SpriteList(use_spatial_hash=True)
+        self.wall_decor_list = arcade.SpriteList(use_spatial_hash=True)
         self.ceiling_list = arcade.SpriteList(use_spatial_hash=True)
         self.layout = RLDungeonGenerator(width, height, cutoff)
         self.add_context()
@@ -83,10 +86,37 @@ class Dungeon():
                 if value[0] == '#':
                     wall = Ceiling(value[1])
                     wall.center_x = c * WALL_SPRITE_SIZE + WALL_SPRITE_SIZE / 2
-                    wall.center_y = r * WALL_SPRITE_SIZE + WALL_SPRITE_SIZE / 2
+                    wall.center_y = (r + 2) * WALL_SPRITE_SIZE + WALL_SPRITE_SIZE / 2
                     self.ceiling_list.append(wall)
+                    if 4 & value[1] != 4:
+                        facade = Wall(value[1])
+                        facade.center_x = c * WALL_SPRITE_SIZE + WALL_SPRITE_SIZE / 2
+                        facade.center_y = r * WALL_SPRITE_SIZE + WALL_SPRITE_SIZE
+                        self.facade_list.append(facade)
+                    if 64 & value[1] == 64 and random.random() < 0.05:
+                        if 4 & value[1] != 4:
+                            facade = WallDecor(value[1])
+                            facade.center_x = c * WALL_SPRITE_SIZE + WALL_SPRITE_SIZE / 2
+                            facade.center_y = r * WALL_SPRITE_SIZE + WALL_SPRITE_SIZE
+                            self.wall_decor_list.append(facade)
+                        elif 16 & value[1] != 16:
+                            facade = WallDecor(value[1])
+                            facade.center_x = (c - 1) * WALL_SPRITE_SIZE + WALL_SPRITE_SIZE / 2
+                            facade.center_y = r * WALL_SPRITE_SIZE + WALL_SPRITE_SIZE
+                            self.wall_decor_list.append(facade)
+                        elif 1 & value[1] != 1:
+                            facade = WallDecor(value[1])
+                            facade.center_x = (c + 1) * WALL_SPRITE_SIZE + WALL_SPRITE_SIZE / 2
+                            facade.center_y = r * WALL_SPRITE_SIZE + WALL_SPRITE_SIZE
+                            self.wall_decor_list.append(facade)
+
                 else:
                     floor = Floor(value[1])
                     floor.center_x = c * WALL_SPRITE_SIZE + WALL_SPRITE_SIZE / 2
                     floor.center_y = r * WALL_SPRITE_SIZE + WALL_SPRITE_SIZE / 2
                     self.floor_list.append(floor)
+                    if value[1] == 0 and random.random() < 0.05:
+                        deco = FloorDecor(random.random() < 0.05)
+                        deco.center_x = c * WALL_SPRITE_SIZE + WALL_SPRITE_SIZE
+                        deco.center_y = r * WALL_SPRITE_SIZE + WALL_SPRITE_SIZE
+                        self.decor_list.append(deco)

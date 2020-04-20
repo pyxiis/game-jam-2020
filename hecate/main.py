@@ -41,6 +41,9 @@ class Hecate(arcade.Window):
         self.wall_list = None
         self.player_list = None
         self.floor_list = None
+        self.floor_decor = None
+        self.facade_list = None
+        self.wall_decor = None
         self.player_sprite = None
         self.view_bottom = 0
         self.view_left = 0
@@ -50,7 +53,7 @@ class Hecate(arcade.Window):
         self.draw_time = 0
 
         self.dungeon = Dungeon(GRID_WIDTH, GRID_HEIGHT, 15)
-        arcade.set_background_color(arcade.color.WHITE)
+        arcade.set_background_color(arcade.color.BLACK)
         self.km = KeyManager()
 
     def setup(self):
@@ -61,7 +64,6 @@ class Hecate(arcade.Window):
         # Create cave system using a 2D grid
         dg = RLDungeonGenerator(GRID_WIDTH, GRID_HEIGHT, 15)
         dg.generate_map()
-        print(dg.dungeon)
         # Create sprites based on 2D grid
 
         # for row in range(dg.height):
@@ -75,6 +77,9 @@ class Hecate(arcade.Window):
         #             self.wall_list.append(wall)
         self.wall_list = self.dungeon.ceiling_list
         self.floor_list = self.dungeon.floor_list
+        self.facade_list = self.dungeon.facade_list
+        self.wall_decor = self.dungeon.wall_decor_list
+        self.floor_decor = self.dungeon.decor_list
         # for wall in self.wall_list:
         # wall.center_x = column * WALL_SPRITE_SIZE + WALL_SPRITE_SIZE / 2
         # wall.center_y = row * WALL_SPRITE_SIZE + WALL_SPRITE_SIZE / 2
@@ -113,8 +118,11 @@ class Hecate(arcade.Window):
         arcade.start_render()
 
         # Draw the sprites
-        self.wall_list.draw(filter=GL_NEAREST)
         self.floor_list.draw(filter=GL_NEAREST)
+        self.facade_list.draw(filter=GL_NEAREST)
+        self.wall_decor.draw(filter=GL_NEAREST)
+        self.floor_decor.draw(filter=GL_NEAREST)
+        self.wall_list.draw(filter=GL_NEAREST)
         self.player_list.draw(filter=GL_NEAREST)
 
         # Draw info on the screen

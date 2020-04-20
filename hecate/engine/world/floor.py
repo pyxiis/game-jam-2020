@@ -2,7 +2,7 @@ import random
 
 import arcade
 
-from ...assets.sprites import FLOOR
+from ...assets.sprites import FLOOR, ALTAR, FLOOR_DECO
 
 
 class Floor(arcade.Sprite):
@@ -101,3 +101,14 @@ class Floor(arcade.Sprite):
                         self.texture = FLOOR[33]
                     else:
                         self.texture = FLOOR[31]
+
+
+class FloorDecor(arcade.Sprite):
+    def __init__(self, altar):
+        super().__init__(scale=1)
+        if altar:
+            print(ALTAR)
+            self.texture = random.choice(ALTAR)
+        else:
+            print(FLOOR_DECO)
+            self.texture = random.choice(FLOOR_DECO)

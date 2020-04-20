@@ -3,6 +3,8 @@ import random
 import arcade
 
 from ...assets.sprites import CEILING as WALL
+from ...assets.sprites import WALL as FACADE
+from ...assets.sprites import WALL_DECO as WD
 
 
 class Ceiling(arcade.Sprite):
@@ -10,6 +12,9 @@ class Ceiling(arcade.Sprite):
         super().__init__(scale=1)
 
         # For readability
+
+        # This part is a bit wonky since arcade has 0 at bottom instead of top,
+        # but flooring cardinality is good
         self.wall_directions = []
         if 1 & direction == 1:
             self.wall_directions.append('e')
@@ -112,13 +117,13 @@ class Ceiling(arcade.Sprite):
                 if 'e' not in self.wall_directions and 'w' not in self.wall_directions:
                     self.texture = random.choice(WALL[23:25])
                 elif 'ne' in self.wall_directions and 'e' in self.wall_directions:
-                    self.texture = WALL[30]
-                elif 'nw' in self.wall_directions and 'w' in self.wall_directions:
-                    self.texture = WALL[31]
-                elif 'se' in self.wall_directions and 'e' in self.wall_directions:
                     self.texture = WALL[32]
-                elif 'sw' in self.wall_directions and 'w' in self.wall_directions:
+                elif 'nw' in self.wall_directions and 'w' in self.wall_directions:
                     self.texture = WALL[33]
+                elif 'se' in self.wall_directions and 'e' in self.wall_directions:
+                    self.texture = WALL[30]
+                elif 'sw' in self.wall_directions and 'w' in self.wall_directions:
+                    self.texture = WALL[31]
                 else:
                     if 'w' in self.wall_directions:
                         self.texture = WALL[40]
@@ -180,3 +185,67 @@ class Ceiling(arcade.Sprite):
                 self.texture = WALL[16]
             else:
                 self.texture = WALL[17]
+
+
+class Wall(arcade.Sprite):
+    def __init__(self, direction):
+        super().__init__(scale=1)
+
+        # For readability
+        self.wall_directions = []
+        if 1 & direction == 1:
+            self.wall_directions.append('e')
+        if 2 & direction == 2:
+            self.wall_directions.append('se')
+        if 4 & direction == 4:
+            self.wall_directions.append('s')
+        if 8 & direction == 8:
+            self.wall_directions.append('sw')
+        if 16 & direction == 16:
+            self.wall_directions.append('w')
+        if 32 & direction == 32:
+            self.wall_directions.append('nw')
+        if 64 & direction == 64:
+            self.wall_directions.append('n')
+        if 128 & direction == 128:
+            self.wall_directions.append('ne')
+
+        if 'se' in self.wall_directions and 'sw' in self.wall_directions:
+            self.texture = FACADE[-3]
+        elif 'se' in self.wall_directions:
+            self.texture = FACADE[-4]
+        elif 'sw' in self.wall_directions:
+            self.texture = FACADE[0]
+        else:
+            self.texture = random.choice(FACADE[1:5])
+
+
+class WallDecor(arcade.Sprite):
+    def __init__(self, direction):
+        super().__init__(scale=1)
+
+        # For readability
+        self.wall_directions = []
+        if 1 & direction == 1:
+            self.wall_directions.append('e')
+        if 2 & direction == 2:
+            self.wall_directions.append('se')
+        if 4 & direction == 4:
+            self.wall_directions.append('s')
+        if 8 & direction == 8:
+            self.wall_directions.append('sw')
+        if 16 & direction == 16:
+            self.wall_directions.append('w')
+        if 32 & direction == 32:
+            self.wall_directions.append('nw')
+        if 64 & direction == 64:
+            self.wall_directions.append('n')
+        if 128 & direction == 128:
+            self.wall_directions.append('ne')
+
+        if 's' not in self.wall_directions:
+            self.texture = random.choice(WD[0:6])
+        elif 'w' not in self.wall_directions:
+            self.texture = random.choice(WD[7:12:2])
+        elif 'e' not in self.wall_directions:
+            self.texture = random.choice(WD[6:12:2])
