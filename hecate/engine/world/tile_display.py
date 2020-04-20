@@ -5,6 +5,7 @@ import arcade
 from .binary_space_partitioning import RLDungeonGenerator
 from .floor import Floor, FloorDecor
 from .wall import Ceiling, Wall, WallDecor
+from ..mob.player import Player
 
 WALL_SPRITE_SCALING = 1
 WALL_SPRITE_SIZE = 16 * WALL_SPRITE_SCALING
@@ -18,9 +19,11 @@ class Dungeon():
         self.decor_list = arcade.SpriteList(use_spatial_hash=True)
         self.wall_decor_list = arcade.SpriteList(use_spatial_hash=True)
         self.ceiling_list = arcade.SpriteList(use_spatial_hash=True)
+        self.player_list = arcade.SpriteList()
         self.layout = RLDungeonGenerator(width, height, cutoff)
         self.add_context()
         self._fill_lists()
+        self.add_player()
 
     def add_context(self):
         for r in range(self.layout.height):
@@ -120,3 +123,21 @@ class Dungeon():
                         deco.center_x = c * WALL_SPRITE_SIZE + WALL_SPRITE_SIZE
                         deco.center_y = r * WALL_SPRITE_SIZE + WALL_SPRITE_SIZE
                         self.decor_list.append(deco)
+        for c in range(self.layout.width):
+            r = -1
+            wall = Ceiling(255)
+            wall.center_x = c * WALL_SPRITE_SIZE + WALL_SPRITE_SIZE / 2
+            wall.center_y = (r + 2) * WALL_SPRITE_SIZE + WALL_SPRITE_SIZE / 2
+            self.ceiling_list.append(wall)
+
+    def add_player(self):
+        p = Player()
+        # placed = False
+        # while not placed:
+        #
+        t = random.choice(self.floor_list)
+
+        p.center_x = t.center_x
+        p.center_y = t.center_y
+
+        self.player_list.append(p)

@@ -21,7 +21,6 @@ class KeyManager:
         self.modifiers = Modifier.parse_modifiers(addmod)
 
     def update_release(self, relkey, relmod):
-        print('hello')
         for i in self.keys:
             if relkey == KEYS[str(i)]:
                 self.keys.remove(i)

@@ -1,5 +1,4 @@
 import os
-import random
 import timeit
 
 import arcade
@@ -7,7 +6,6 @@ import yaml
 from pyglet.gl import GL_NEAREST
 
 from hecate.engine.input import KeyManager
-from hecate.engine.world.binary_space_partitioning import RLDungeonGenerator
 from hecate.engine.world.tile_display import Dungeon
 
 try:
@@ -58,54 +56,40 @@ class Hecate(arcade.Window):
 
     def setup(self):
         """ Set up the game """
-        self.wall_list = arcade.SpriteList(use_spatial_hash=True)
-        self.player_list = arcade.SpriteList()
-
-        # Create cave system using a 2D grid
-        dg = RLDungeonGenerator(GRID_WIDTH, GRID_HEIGHT, 15)
-        dg.generate_map()
-        # Create sprites based on 2D grid
-
-        # for row in range(dg.height):
-        #     for column in range(dg.width):
-        #         value = dg.dungeon[row][column]
-        #         if value == '#':
-        #             wall = arcade.Sprite(":resources:images/tiles/grassCenter.png",
-        #                                  WALL_SPRITE_SCALING)
-        #             wall.center_x = column * WALL_SPRITE_SIZE + WALL_SPRITE_SIZE / 2
-        #             wall.center_y = row * WALL_SPRITE_SIZE + WALL_SPRITE_SIZE / 2
-        #             self.wall_list.append(wall)
+        self.player_list = self.dungeon.player_list
+        print('list made')
         self.wall_list = self.dungeon.ceiling_list
         self.floor_list = self.dungeon.floor_list
         self.facade_list = self.dungeon.facade_list
         self.wall_decor = self.dungeon.wall_decor_list
         self.floor_decor = self.dungeon.decor_list
-        # for wall in self.wall_list:
-        # wall.center_x = column * WALL_SPRITE_SIZE + WALL_SPRITE_SIZE / 2
-        # wall.center_y = row * WALL_SPRITE_SIZE + WALL_SPRITE_SIZE / 2
 
         # Set up the player
-        self.player_sprite = arcade.Sprite(
-            "/Users/ethanji/PycharmProjects/hecate/venv/hecate/hecate/assets/rogue.png",
-            0.25)
-        self.player_list.append(self.player_sprite)
+        # self.player_sprite = Player()
+        # self.player_sprite.center_x = 6400
+        # self.player_sprite.center_y = 3200
+        # print(ROGUE[0])
+        #
+        # placed = False
+        # while not placed:
+        #     # Randomly position
+        #     # Are we in a wall?
+        #     walls_hit = arcade.check_for_collision_with_list(self.player_sprite,
+        #                                                      self.wall_list)
+        #     if len(walls_hit) == 0:
+        #         print(self.player_sprite.center_x)
+        #         print(AREA_WIDTH)
+        #         print(self.player_sprite.center_y)
+        #         print(AREA_HEIGHT)
+        #         #     # Not in a wall! Success!
+        #         placed = True
+
+        # self.player_list = self.dungeon.player_list
 
         # Randomly place the player. If we are in a wall, repeat until we aren't.
-        placed = False
-        while not placed:
-            # Randomly position
-            self.player_sprite.center_x = random.randrange(AREA_WIDTH)
-            self.player_sprite.center_y = random.randrange(AREA_HEIGHT)
 
-            # Are we in a wall?
-            # walls_hit = arcade.check_for_collision_with_list(self.player_sprite,
-            #                                                  self.wall_list)
-            # if len(walls_hit) == 0:
-            #     # Not in a wall! Success!
-            placed = True
-
-        self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite,
-                                                         self.wall_list)
+        # self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite,
+        #                                                  self.wall_list)
 
     def on_draw(self):
         """ Render the screen. """
@@ -124,14 +108,17 @@ class Hecate(arcade.Window):
         self.floor_decor.draw(filter=GL_NEAREST)
         self.wall_list.draw(filter=GL_NEAREST)
         self.player_list.draw(filter=GL_NEAREST)
-
-        # Draw info on the screen
-        sprite_count = len(self.wall_list)
-
-        self.draw_time = timeit.default_timer() - draw_start_time
+        print('drawn')
 
     def update(self, delta_time):
-        pass
+        # for key in self.km.keys:
+        #     if str(key) == 'LEFT':
+
+        # pass
+        # self.physics_engine.update()
+        self.player_sprite = self.player_list[0]
+        arcade.set_viewport(self.player_sprite.center_x - 1920, self.player_sprite.center_x + 1920,
+                            self.player_sprite.center_x - 1080, self.player_sprite.center_x + 1080)
 
     def on_key_press(self, key, modifiers):
         self.km.update_press(key, modifiers)

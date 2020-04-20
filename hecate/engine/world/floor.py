@@ -107,8 +107,6 @@ class FloorDecor(arcade.Sprite):
     def __init__(self, altar):
         super().__init__(scale=1)
         if altar:
-            print(ALTAR)
             self.texture = random.choice(ALTAR)
         else:
-            print(FLOOR_DECO)
             self.texture = random.choice(FLOOR_DECO)
