@@ -12,7 +12,7 @@ WALL_SPRITE_SIZE = 16 * WALL_SPRITE_SCALING
 
 
 class Dungeon():
-    def __init__(self, width, height, cutoff):
+    def __init__(self, width, height, cutoff, key_manager):
         self.wall_list = arcade.SpriteList(use_spatial_hash=True)
         self.facade_list = arcade.SpriteList(use_spatial_hash=True)
         self.floor_list = arcade.SpriteList(use_spatial_hash=True)
@@ -20,6 +20,7 @@ class Dungeon():
         self.wall_decor_list = arcade.SpriteList(use_spatial_hash=True)
         self.ceiling_list = arcade.SpriteList(use_spatial_hash=True)
         self.player_list = arcade.SpriteList()
+        self.km = key_manager
         self.layout = RLDungeonGenerator(width, height, cutoff)
         self.add_context()
         self._fill_lists()
@@ -131,7 +132,7 @@ class Dungeon():
             self.ceiling_list.append(wall)
 
     def add_player(self):
-        p = Player()
+        p = Player(self.km)
         # placed = False
         # while not placed:
         #

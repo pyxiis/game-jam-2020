@@ -49,21 +49,23 @@ class Hecate(arcade.Window):
 
         self.processing_time = 0
         self.draw_time = 0
-
-        self.dungeon = Dungeon(GRID_WIDTH, GRID_HEIGHT, 15)
-        arcade.set_background_color(arcade.color.BLACK)
         self.km = KeyManager()
+        self.dungeon = Dungeon(GRID_WIDTH, GRID_HEIGHT, 15, self.km)
+        arcade.set_background_color(arcade.color.BLACK)
+
 
     def setup(self):
         """ Set up the game """
         self.player_list = self.dungeon.player_list
+        self.player_sprite = self.player_list[0]
         print('list made')
         self.wall_list = self.dungeon.ceiling_list
         self.floor_list = self.dungeon.floor_list
         self.facade_list = self.dungeon.facade_list
         self.wall_decor = self.dungeon.wall_decor_list
         self.floor_decor = self.dungeon.decor_list
-
+        self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite,
+                                                         self.wall_list)
         # Set up the player
         # self.player_sprite = Player()
         # self.player_sprite.center_x = 6400
@@ -106,19 +108,18 @@ class Hecate(arcade.Window):
         self.facade_list.draw(filter=GL_NEAREST)
         self.wall_decor.draw(filter=GL_NEAREST)
         self.floor_decor.draw(filter=GL_NEAREST)
-        self.wall_list.draw(filter=GL_NEAREST)
         self.player_list.draw(filter=GL_NEAREST)
-        print('drawn')
+        self.wall_list.draw(filter=GL_NEAREST)
 
     def update(self, delta_time):
         # for key in self.km.keys:
         #     if str(key) == 'LEFT':
 
         # pass
-        # self.physics_engine.update()
-        self.player_sprite = self.player_list[0]
-        arcade.set_viewport(self.player_sprite.center_x - 1920, self.player_sprite.center_x + 1920,
-                            self.player_sprite.center_x - 1080, self.player_sprite.center_x + 1080)
+        self.player_sprite.update()
+        self.physics_engine.update()
+        arcade.set_viewport(self.player_sprite.center_x - 192, self.player_sprite.center_x + 192,
+                            self.player_sprite.center_y - 108, self.player_sprite.center_y + 108)
 
     def on_key_press(self, key, modifiers):
         self.km.update_press(key, modifiers)
