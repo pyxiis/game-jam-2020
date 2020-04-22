@@ -31,6 +31,8 @@ class Player(arcade.Sprite):
         print('player made!')
 
     def update(self):
+        self.change_x = 0
+        self.change_y = 0
         self.time += 1
         if self.time == 10:
             self.time = 0
