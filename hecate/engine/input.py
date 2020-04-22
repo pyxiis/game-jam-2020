@@ -15,6 +15,8 @@ class KeyManager:
     def __init__(self):
         self.keys = set()
         self.modifiers = set()
+        self.loc = (0, 0)
+        self.mouse_keys = set()
 
     def update_press(self, addkey, addmod):
         self.keys.add(addkey)
@@ -23,6 +25,19 @@ class KeyManager:
     def update_release(self, relkey, relmod):
         self.keys.remove(relkey)
         self.modifiers = KeyManager.parse_modifiers(relmod)
+
+    def update_mouse_press(self, x, y, button, mods):
+        self.mouse_keys.add(button)
+        self.modifiers = KeyManager.parse_modifiers(mods)
+        self.loc = (x, y)
+
+    def update_mouse_release(self, x, y, button, mods):
+        self.mouse_keys.remove(button)
+        self.modifiers = KeyManager.parse_modifiers(mods)
+        self.loc = (x, y)
+
+    def update_mouse(self, x, y):
+        self.loc = (x, y)
 
     @staticmethod
     def parse_modifiers(modifiers):

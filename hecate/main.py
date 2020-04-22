@@ -59,6 +59,8 @@ class Hecate(arcade.Window):
         self.dungeon = Dungeon(GRID_WIDTH, GRID_HEIGHT, 15, self.km)
         arcade.set_background_color(arcade.color.BLACK)
 
+        self.current_vista = 192
+
 
     def setup(self):
         """ Set up the game """
@@ -107,6 +109,11 @@ class Hecate(arcade.Window):
         # self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite,
         #                                                  self.wall_list)
 
+        self.set_fullscreen(not self.fullscreen)
+        width, height = self.get_size()
+        self.set_fullscreen(not self.fullscreen)
+        self.set_size(width, height)
+
     def on_draw(self):
         """ Render the screen. """
 
@@ -132,8 +139,6 @@ class Hecate(arcade.Window):
         # pass
         self.player_sprite.update()
         self.physics_engine.update()
-        arcade.set_viewport(self.player_sprite.center_x - 192, self.player_sprite.center_x + 192,
-                            self.player_sprite.center_y - 108, self.player_sprite.center_y + 108)
         position = self.music.get_stream_position()
 
         # The position pointer is reset to 0 right after we finish the song.
@@ -142,6 +147,11 @@ class Hecate(arcade.Window):
         if position == 0.0:
             self.advance_song()
             self.play_song()
+
+        arcade.set_viewport(self.player_sprite.center_x - self.current_vista,
+                            self.player_sprite.center_x + self.current_vista,
+                            self.player_sprite.center_y - self.current_vista * 108 / 192,
+                            self.player_sprite.center_y + self.current_vista * 108 / 192)
 
     def on_key_press(self, key, modifiers):
         self.km.update_press(key, modifiers)
@@ -169,6 +179,27 @@ class Hecate(arcade.Window):
         # and on_update will think the music is over and advance us to the next
         # song before starting this one.
         time.sleep(0.03)
+
+    def on_mouse_press(self, x: float, y: float, button: int, modifiers: int):
+        self.km.update_mouse_press(x, y, button, modifiers)
+
+    def on_mouse_release(self, x: float, y: float, button: int,
+                         modifiers: int):
+        self.km.update_mouse_release(x, y, button, modifiers)
+
+    def on_mouse_motion(self, x: float, y: float, dx: float, dy: float):
+        self.km.update_mouse(x, y)
+
+    def on_mouse_scroll(self, x: int, y: int, scroll_x: int, scroll_y: int):
+        # not managed by keymanager because scrolling relies on deltas rather than absolute data
+        if scroll_y > 0:
+            self.current_vista += (scroll_x ** 2 + scroll_y ** 2) ** 0.5
+            if self.current_vista > 192:
+                self.current_vista = 192
+        elif scroll_y < 0:
+            self.current_vista -= (scroll_x ** 2 + scroll_y ** 2) ** 0.5
+            if self.current_vista < 19.2:
+                self.current_vista = 19.2
 
 
 def main():
