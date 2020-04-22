@@ -1,4 +1,5 @@
 import os
+import time
 import timeit
 
 import arcade
@@ -20,6 +21,7 @@ GRID_WIDTH = SETTINGS['world']['bin']['width']
 GRID_HEIGHT = SETTINGS['world']['bin']['height']
 AREA_WIDTH = GRID_WIDTH * WALL_SPRITE_SIZE
 AREA_HEIGHT = GRID_HEIGHT * WALL_SPRITE_SIZE
+MUSIC_VOLUME = 0.5
 
 
 class Hecate(arcade.Window):
@@ -47,6 +49,10 @@ class Hecate(arcade.Window):
         self.view_left = 0
         self.physics_engine = None
 
+        self.music_list = []
+        self.current_song = 0
+        self.music = None
+
         self.processing_time = 0
         self.draw_time = 0
         self.km = KeyManager()
@@ -66,6 +72,14 @@ class Hecate(arcade.Window):
         self.floor_decor = self.dungeon.decor_list
         self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite,
                                                          self.wall_list)
+
+        # List of music
+        self.music_list = ['assets/background.mp3']
+        # Array index of what to play
+        self.current_song = 0
+        # Play the song
+        self.play_song()
+
         # Set up the player
         # self.player_sprite = Player()
         # self.player_sprite.center_x = 6400
@@ -120,13 +134,41 @@ class Hecate(arcade.Window):
         self.physics_engine.update()
         arcade.set_viewport(self.player_sprite.center_x - 192, self.player_sprite.center_x + 192,
                             self.player_sprite.center_y - 108, self.player_sprite.center_y + 108)
+        position = self.music.get_stream_position()
+
+        # The position pointer is reset to 0 right after we finish the song.
+        # This makes it very difficult to figure out if we just started playing
+        # or if we are doing playing.
+        if position == 0.0:
+            self.advance_song()
+            self.play_song()
 
     def on_key_press(self, key, modifiers):
         self.km.update_press(key, modifiers)
 
-
     def on_key_release(self, key, modifiers):
         self.km.update_release(key, modifiers)
+
+    def advance_song(self):
+        """ Advance our pointer to the next song. This does NOT start the song. """
+        self.current_song += 1
+        if self.current_song >= len(self.music_list):
+            self.current_song = 0
+
+    def play_song(self):
+        """ Play the song. """
+        # Stop what is currently playing.
+        if self.music:
+            self.music.stop()
+
+        # Play the next song
+        print(f"Playing {self.music_list[self.current_song]}")
+        self.music = arcade.Sound(self.music_list[self.current_song], streaming=True)
+        self.music.play(MUSIC_VOLUME)
+        # This is a quick delay. If we don't do this, our elapsed time is 0.0
+        # and on_update will think the music is over and advance us to the next
+        # song before starting this one.
+        time.sleep(0.03)
 
 
 def main():

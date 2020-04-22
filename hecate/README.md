@@ -14,8 +14,8 @@ Your lifelong imprisonment in Hecate's inescapable labyrinth begins now.
 
 ### Setup
 
-First, install dependencies through `pip install -r requirements.txt`.
-Then, run the program through `python main.py`.
+First, install dependencies by navigating to the directory with the requirements.txt and using 
+`pip install -r requirements.txt`. Then, run the program through `python main.py`.
 
 ### Credits
 
@@ -23,6 +23,7 @@ Then, run the program through `python main.py`.
 - [pyxiis](https://github.com/pyxiis)
 
 #### Art
-- [Calciumtrice](https://calciumtrice.tumblr.com/)
-
-All of the artwork I used by Calciumtrice can be found [here](https://opengameart.org/users/calciumtrice).
+- [Calciumtrice](https://calciumtrice.tumblr.com/): All of the sprites I used were made by Calciumtrice and can be found [here](https://opengameart.org/users/calciumtrice) 
+under [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/).
+- [Tabletop Audio](https://tabletopaudio.com/): The background music was provided by TabletopAudio 
+under [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/)

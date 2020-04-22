@@ -172,7 +172,7 @@ class Ceiling(arcade.Sprite):
             elif 'w' in self.wall_directions:
                 self.texture = WALL[19]
             elif 's' in self.wall_directions:
-                self.texture = WALL[16]
+                self.texture = WALL[20]
             else:
                 self.texture = WALL[17]
         else:

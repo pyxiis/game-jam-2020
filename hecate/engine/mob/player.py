@@ -5,6 +5,11 @@ from ...assets.sprites import ROGUE, ANTIROGUE, WARRIOR, ANTIWARRIOR, WIZARD, AN
 STATES = [ROGUE, WARRIOR, WIZARD]
 ANTISTATES = [ANTIROGUE, ANTIWARRIOR, ANTIWIZARD]
 
+LEFT = (arcade.key.A, arcade.key.J, arcade.key.LEFT)
+RIGHT = (arcade.key.D, arcade.key.L, arcade.key.RIGHT)
+UP = (arcade.key.W, arcade.key.I, arcade.key.UP)
+DOWN = (arcade.key.S, arcade.key.K, arcade.key.DOWN)
+
 
 class Player(arcade.Sprite):
     def __init__(self, km):
